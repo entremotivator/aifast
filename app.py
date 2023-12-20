@@ -6,12 +6,13 @@ class DiviPageCreator:
         self.openai_key = openai_key
         self.ftp_credentials_list = ftp_credentials_list
 
-    def create_divi_page(self, ftp_credentials, page_title, page_content, uploaded_file):
+    def create_divi_page(self, domain, ftp_credentials, page_title, page_content, uploaded_file):
         try:
             if uploaded_file:
                 # Implement logic to create a new Divi page
                 # Use self.openai_key, page_title, page_content, and uploaded_file
                 # Use ftp_credentials for FTP connection details
+                # Use domain for the specific domain information
 
                 # Placeholder ID, replace with actual logic
                 return "123"
@@ -22,18 +23,19 @@ class DiviPageCreator:
             st.error(f"Error creating Divi page: {e}")
             return None
 
-    def set_home_page(self, page_id):
+    def set_home_page(self, domain, page_id):
         try:
             # Implement logic to set the newly created page as the homepage
             pass
         except Exception as e:
             st.error(f"Error setting the homepage: {e}")
 
-    def upload_to_ftp(self, ftp_credentials, uploaded_file):
+    def upload_to_ftp(self, domain, ftp_credentials, uploaded_file):
         try:
             if uploaded_file:
                 # Implement logic to upload files to WordPress through FTP
                 # Use ftp_credentials for FTP connection details
+                # Use domain for the specific domain information
                 pass
             else:
                 st.warning("Please upload a file for FTP.")
@@ -56,8 +58,14 @@ def main():
             ftp_host = st.text_input(f"FTP Host {i + 1}")
             ftp_user = st.text_input(f"FTP User {i + 1}")
             ftp_password = st.text_input(f"FTP Password {i + 1}", type="password")
+            domain = st.text_input(f"Domain {i + 1}")
 
-            ftp_credentials_list.append({'host': ftp_host, 'user': ftp_user, 'password': ftp_password})
+            ftp_credentials_list.append({
+                'host': ftp_host,
+                'user': ftp_user,
+                'password': ftp_password,
+                'domain': domain
+            })
 
     # Main content for Divi page creation
     with st.container():
@@ -82,16 +90,16 @@ def main():
             # Create Divi page for each section using each set of FTP credentials
             for ftp_credentials in ftp_credentials_list:
                 if st.button(f"Create Divi Page for Section {i + 1} with FTP {ftp_credentials['host']}"):
-                    page_id = divi_creator.create_divi_page(ftp_credentials, page_title, page_content, uploaded_file)
+                    page_id = divi_creator.create_divi_page(ftp_credentials['domain'], ftp_credentials, page_title, page_content, uploaded_file)
 
                     if page_id:
                         st.success(f"Divi page created successfully for Section {i + 1} with ID: {page_id}")
 
                         # Set the new page as the homepage
-                        divi_creator.set_home_page(page_id)
+                        divi_creator.set_home_page(ftp_credentials['domain'], page_id)
 
                         # Upload files to WordPress through FTP
-                        divi_creator.upload_to_ftp(ftp_credentials, uploaded_file)
+                        divi_creator.upload_to_ftp(ftp_credentials['domain'], ftp_credentials, uploaded_file)
 
 if __name__ == "__main__":
     main()
