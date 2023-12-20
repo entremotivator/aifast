@@ -1,50 +1,35 @@
 import streamlit as st
 from ftplib import FTP
-import subprocess
 
-# Placeholder functions for Divi page creation and WordPress interaction
-def create_divi_page(api_key, page_title, page_content, uploaded_file):
-    try:
-        # Implement logic to create a new Divi page
-        # You can use the uploaded_file parameter to handle file uploads
-        return "123"  # Placeholder ID, replace with actual logic
-    except Exception as e:
-        st.error(f"Error creating Divi page: {e}")
-        return None
+class DiviPageCreator:
+    def __init__(self, openai_key, ftp_credentials):
+        self.openai_key = openai_key
+        self.ftp_credentials = ftp_credentials
 
-def set_home_page(api_key, page_id):
-    try:
-        # Implement logic to set the newly created page as the homepage
-        pass
-    except Exception as e:
-        st.error(f"Error setting the homepage: {e}")
+    def create_divi_page(self, page_title, page_content, uploaded_file):
+        try:
+            # Implement logic to create a new Divi page
+            # You can use the uploaded_file parameter to handle file uploads
+            return "123"  # Placeholder ID, replace with actual logic
+        except Exception as e:
+            st.error(f"Error creating Divi page: {e}")
+            return None
 
-def upload_to_ftp(ftp_credentials, uploaded_file):
-    try:
-        # Implement logic to upload files to WordPress through FTP
-        # Use ftp_credentials dictionary for FTP connection details
-        pass
-    except Exception as e:
-        st.error(f"Error uploading files to FTP: {e}")
+    def set_home_page(self, page_id):
+        try:
+            # Implement logic to set the newly created page as the homepage
+            pass
+        except Exception as e:
+            st.error(f"Error setting the homepage: {e}")
 
-# Apply some basic styling using HTML and CSS
-st.markdown("""
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-        }
-        .sidebar .sidebar-content {
-            background-color: #f5f5f5;
-            padding: 1rem;
-            border-radius: 10px;
-        }
-        .main {
-            padding: 2rem;
-        }
-    </style>
-""", unsafe_allow_html=True)
+    def upload_to_ftp(self, uploaded_file):
+        try:
+            # Implement logic to upload files to WordPress through FTP
+            # Use self.ftp_credentials for FTP connection details
+            pass
+        except Exception as e:
+            st.error(f"Error uploading files to FTP: {e}")
 
-# Streamlit app
 def main():
     st.title("AI Funnel Machine")
 
@@ -65,6 +50,8 @@ def main():
         # Get the number of page sections
         num_sections = st.number_input("Number of Page Sections", min_value=1, value=1)
 
+        divi_creator = DiviPageCreator(openai_key, {'host': ftp_host, 'user': ftp_user, 'password': ftp_password})
+
         # Loop through each section
         for i in range(num_sections):
             st.subheader(f"Section {i + 1}")
@@ -78,17 +65,16 @@ def main():
 
             # Create Divi page for each section
             if st.button(f"Create Divi Page for Section {i + 1}"):
-                page_id = create_divi_page(openai_key, page_title, page_content, uploaded_file)
+                page_id = divi_creator.create_divi_page(page_title, page_content, uploaded_file)
 
                 if page_id:
                     st.success(f"Divi page created successfully for Section {i + 1} with ID: {page_id}")
 
                     # Set the new page as the homepage
-                    set_home_page(openai_key, page_id)
+                    divi_creator.set_home_page(page_id)
 
                     # Upload files to WordPress through FTP
-                    ftp_credentials = {'host': ftp_host, 'user': ftp_user, 'password': ftp_password}
-                    upload_to_ftp(ftp_credentials, uploaded_file)
+                    divi_creator.upload_to_ftp(uploaded_file)
 
 if __name__ == "__main__":
     main()
