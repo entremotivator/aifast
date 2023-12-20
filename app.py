@@ -8,9 +8,15 @@ class DiviPageCreator:
 
     def create_divi_page(self, page_title, page_content, uploaded_file):
         try:
-            # Implement logic to create a new Divi page
-            # You can use the uploaded_file parameter to handle file uploads
-            return "123"  # Placeholder ID, replace with actual logic
+            if uploaded_file:
+                # Implement logic to create a new Divi page
+                # Use self.openai_key, page_title, page_content, and uploaded_file
+
+                # Placeholder ID, replace with actual logic
+                return "123"
+            else:
+                st.warning("Please upload a file before creating a Divi page.")
+                return None
         except Exception as e:
             st.error(f"Error creating Divi page: {e}")
             return None
@@ -24,9 +30,12 @@ class DiviPageCreator:
 
     def upload_to_ftp(self, uploaded_file):
         try:
-            # Implement logic to upload files to WordPress through FTP
-            # Use self.ftp_credentials for FTP connection details
-            pass
+            if uploaded_file:
+                # Implement logic to upload files to WordPress through FTP
+                # Use self.ftp_credentials for FTP connection details
+                pass
+            else:
+                st.warning("Please upload a file for FTP.")
         except Exception as e:
             st.error(f"Error uploading files to FTP: {e}")
 
@@ -78,3 +87,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
