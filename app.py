@@ -46,7 +46,7 @@ st.markdown("""
 
 # Streamlit app
 def main():
-    st.title("WordPress Divi Page Creator")
+    st.title("AI Funnel Machine")
 
     # Sidebar for FTP credentials and OpenAI key
     with st.sidebar:
